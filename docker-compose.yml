@@ -1,0 +1,21 @@
+services:
+  php-nginx:
+    image: webdevops/php-nginx-dev:8.3 # Usa una etiqueta de versión específica
+    container_name: php-practicas
+    working_dir: /app
+    ports:
+      - "8080:80" # Mapea el puerto 80 del contenedor al 8080 de tu host
+    environment:
+      # Configuración del servidor web
+      - WEB_DOCUMENT_ROOT=/app
+      # Configuración de Xdebug para desarrollo
+      - XDEBUG_MODE=debug                  # Activa el modo de depuración paso a paso
+      - XDEBUG_START_WITH_REQUEST=yes      # Inicia la depuración en cada petición automáticamente
+      - XDEBUG_CLIENT_HOST=host.docker.internal # IP del host para conectar con VS Code
+      - XDEBUG_CLIENT_PORT=9003            # Puerto estándar de Xdebug 3
+      - XDEBUG_LOG=/tmp/xdebug.log
+      - XDEBUG_LOG_LEVEL=10
+    volumes:
+      - ./app:/app:rw,cached # Monta tu código local en el directorio /app del contenedor
+    extra_hosts:
+      - host.docker.internal:host-gateway
